@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sugarwise - 常见食物含糖量科普</title>
+  <style>
+    * {margin:0;padding:0;box-sizing:border-box;}
+    body {
+      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+      line-height:1.6;color:#333;
+      background:linear-gradient(135deg,#667eea 0%,#764ba2 100%);
+      min-height:100vh;transition:opacity .5s ease;
+    }
+    .container{max-width:1200px;margin:0 auto;padding:0 20px;}
+    header{background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);
+      padding:1rem 0;box-shadow:0 4px 20px rgba(0,0,0,0.1);
+      position:sticky;top:0;z-index:100;}
+    nav{display:flex;justify-content:space-between;align-items:center;}
+    .logo{font-size:2rem;font-weight:bold;
+      background:linear-gradient(45deg,#ff6b6b,#4ecdc4);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+      animation:logoGlow 2s ease-in-out infinite alternate;}
+    @keyframes logoGlow{from{filter:brightness(1);}to{filter:brightness(1.2);}}
+    .nav-links{display:flex;list-style:none;gap:2rem;}
+    .nav-links a{text-decoration:none;color:#333;font-weight:500;transition:.3s;position:relative;}
+    .nav-links a:hover{color:#ff6b6b;transform:translateY(-2px);}
+    .nav-links a::after{content:'';position:absolute;width:0;height:2px;bottom:-5px;left:50%;
+      background:#ff6b6b;transition:.3s;}
+    .nav-links a:hover::after{width:100%;left:0;}
+    .hero{text-align:center;padding:4rem 0;color:white;}
+    .hero h1{font-size:3.5rem;margin-bottom:1rem;animation:fadeInUp 1s ease-out;}
+    .hero p{font-size:1.2rem;margin-bottom:2rem;opacity:.9;animation:fadeInUp 1s ease-out .3s both;}
+    @keyframes fadeInUp{from{opacity:0;transform:translateY(30px);}
+      to{opacity:1;transform:translateY(0);}}
+    main{background:white;border-radius:20px 20px 0 0;margin-top:2rem;padding:3rem 0;
+      box-shadow:0 -10px 40px rgba(0,0,0,0.1);}
+    .section{margin-bottom:4rem;}
+    .section h2{font-size:2.5rem;text-align:center;margin-bottom:2rem;
+      background:linear-gradient(45deg,#ff6b6b,#4ecdc4);
+      -webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+    .fruit-grid,.drink-grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+      gap:2rem;margin-top:2rem;}
+    .fruit-card,.drink-card{
+      background:white;border-radius:15px;padding:2rem;text-align:center;
+      box-shadow:0 10px 30px rgba(0,0,0,0.1);
+      transition:.3s;border:2px solid transparent;position:relative;overflow:hidden;}
+    .fruit-card:hover,.drink-card:hover{transform:translateY(-5px);
+      box-shadow:0 20px 40px rgba(0,0,0,0.15);border-color:#ff6b6b;}
+    .fruit-icon,.drink-icon{font-size:3rem;margin-bottom:1rem;display:block;
+      animation:bounce 2s ease-in-out infinite;}
+    @keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+    .sugar-amount{font-size:1.1rem;font-weight:bold;margin-bottom:1rem;}
+    .sugar-bar{width:100%;height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden;margin-bottom:1rem;}
+    .sugar-fill{height:100%;border-radius:4px;transition:width 2s ease-out;animation:fillBar 2s ease-out;}
+    @keyframes fillBar{from{width:0;}}
+    .low-sugar{color:#4facfe;}
+    .low-sugar .sugar-fill{background:linear-gradient(90deg,#4facfe,#00f2fe);}
+    .medium-sugar{color:#43e97b;}
+    .medium-sugar .sugar-fill{background:linear-gradient(90deg,#43e97b,#38f9d7);}
+    .high-sugar{color:#fa709a;}
+    .high-sugar .sugar-fill{background:linear-gradient(90deg,#fa709a,#fee140);}
+    .search-container{max-width:500px;margin:2rem auto;position:relative;}
+    .search-box{width:100%;padding:1rem 1.5rem;border:none;border-radius:50px;
+      font-size:1.1rem;box-shadow:0 10px 30px rgba(0,0,0,0.1);outline:none;transition:.3s;}
+    .search-box:focus{transform:scale(1.05);box-shadow:0 15px 40px rgba(0,0,0,0.2);}
+  </style>
+</head>
+<body>
+<header>
+  <nav class="container">
+    <div class="logo">Sugarwise</div>
+    <ul class="nav-links">
+      <li><a href="#home">首页</a></li>
+      <li><a href="#fruits">水果</a></li>
+      <li><a href="#drinks">饮料</a></li>
+    </ul>
+  </nav>
+</header>
+
+<section class="hero" id="home">
+  <div class="container">
+    <h1>了解常见食物含糖量</h1>
+    <p>科学选择，健康生活。让我们帮您了解水果和饮料的糖分含量</p>
+    <div class="search-container">
+      <input type="text" class="search-box" id="searchBox" placeholder="搜索水果或饮料名称...">
+    </div>
+  </div>
+</section>
+
+<main>
+  <div class="container">
+    <section class="section" id="fruits">
+      <h2>常见水果含糖量</h2>
+      <div class="fruit-grid" id="fruitGrid"></div>
+    </section>
+
+    <section class="section" id="drinks">
+      <h2>常见饮料含糖量</h2>
+      <div class="drink-grid" id="drinkGrid"></div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <p>&copy; 2025 Sugarwise. 用心科普，关爱健康。</p>
+  </div>
+</footer>
+
+<script>
+  // ========== 水果数据 ==========
+  const fruits = [
+    { name:"榴莲（猫山王）", icon:"🥭", sugar:38.00 },
+    { name:"释迦摩尼果", icon:"🍏", sugar:22.90 },
+    { name:"桂圆", icon:"🍒", sugar:20.90 },
+    { name:"冬枣", icon:"🍎", sugar:20.70 },
+    { name:"葡萄（国产红葡萄）", icon:"🍇", sugar:19.60 },
+    { name:"荔枝（妃子笑）", icon:"🍑", sugar:19.20 },
+    { name:"葡萄（茉香葡萄）", icon:"🍇", sugar:19.00 },
+    { name:"西梅", icon:"🍑", sugar:18.40 },
+    { name:"山竹", icon:"🍈", sugar:18.40 },
+    { name:"水果樱桃", icon:"🍒", sugar:18.40 },
+    { name:"甘蔗（黄金甘蔗）", icon:"🥢", sugar:18.40 },
+    { name:"凤梨（海南金钻凤梨）", icon:"🍍", sugar:18.30 },
+    { name:"葡萄（阳光玫瑰）", icon:"🍇", sugar:18.10 },
+    { name:"柑橘（阳光1号）", icon:"🍊", sugar:18.00 },
+    { name:"龙眼", icon:"🥥", sugar:17.80 },
+    { name:"车厘子", icon:"🍒", sugar:17.60 },
+    { name:"柿子", icon:"🟠", sugar:16.70 },
+    { name:"芒果（贵妃芒果）", icon:"🥭", sugar:16.50 },
+    { name:"葡萄（巨峰葡萄）", icon:"🍇", sugar:16.40 },
+    { name:"梨子（贵妃红梨）", icon:"🍐", sugar:16.30 },
+    { name:"芒果（台农芒果）", icon:"🥭", sugar:15.70 },
+    { name:"蜜瓜（红冠蜜瓜）", icon:"🍈", sugar:15.50 },
+    { name:"桃子（云南珍珠蜜桃）", icon:"🍑", sugar:14.80 },
+    { name:"凤梨（徐闻金钻凤梨）", icon:"🍍", sugar:14.50 },
+    { name:"橙子（冰糖橙）", icon:"🍊", sugar:14.30 },
+    { name:"桃子（彩虹蜜蟠桃）", icon:"🍑", sugar:14.10 },
+    { name:"葡萄（美人指）", icon:"🍇", sugar:13.90 },
+    { name:"芒果（金煌芒果）", icon:"🥭", sugar:13.90 },
+    { name:"无花果", icon:"🌸", sugar:13.50 },
+    { name:"柚子（麻麻柚）", icon:"🍊", sugar:13.40 },
+    { name:"橙子（脐橙）", icon:"🍊", sugar:13.30 },
+    { name:"甘蔗（黑皮甘蔗）", icon:"🥢", sugar:13.10 },
+    { name:"巴西柑", icon:"🍊", sugar:12.90 },
+    { name:"苹果", icon:"🍎", sugar:12.80 },
+    { name:"橘子（砂糖橘）", icon:"🍊", sugar:12.80 },
+    { name:"白心火龙果", icon:"🐉", sugar:12.70 },
+    { name:"菇娘果", icon:"🍒", sugar:12.60 },
+    { name:"奇异果", icon:"🥝", sugar:12.60 },
+    { name:"蓝莓", icon:"🫐", sugar:12.60 },
+    { name:"黄杏", icon:"🍑", sugar:12.50 },
+    { name:"橘子（火橘）", icon:"🍊", sugar:12.30 },
+    { name:"梨子（库尔勒香梨）", icon:"🍐", sugar:12.20 },
+    { name:"橘子（耙耙柑）", icon:"🍊", sugar:12.20 },
+    { name:"梨子（贡梨）", icon:"🍐", sugar:12.20 },
+    { name:"蜜瓜（绿洲蜜瓜）", icon:"🍈", sugar:12.20 },
+    { name:"石榴", icon:"💎", sugar:12.10 },
+    { name:"桃子（龙泉驿水蜜桃）", icon:"🍑", sugar:12.10 },
+    { name:"桃子（油桃）", icon:"🍑", sugar:11.40 },
+    { name:"梨子（丹霞红梨）", icon:"🍐", sugar:11.20 },
+    { name:"杨梅", icon:"🍒", sugar:10.80 },
+    { name:"柚子", icon:"🍊", sugar:10.70 },
+    { name:"红心火龙果", icon:"🐉", sugar:10.20 },
+    { name:"油柑", icon:"🍏", sugar:10.00 },
+    { name:"黄西瓜", icon:"🍉", sugar:9.50 },
+    { name:"水果玉米", icon:"🌽", sugar:9.20 },
+    { name:"桃子（黄桃）", icon:"🍑", sugar:8.30 },
+    { name:"柠檬（香水柠檬）", icon:"🍋", sugar:7.90 },
+    { name:"柠檬（海南青柠檬）", icon:"🍋", sugar:7.80 },
+    { name:"圣女果", icon:"🍅", sugar:7.60 },
+    { name:"芭乐", icon:"🍐", sugar:7.50 },
+    { name:"桃子（水蜜桃）", icon:"🍑", sugar:7.50 },
+    { name:"雪梨", icon:"🍐", sugar:7.40 },
+    { name:"黄色小番茄", icon:"🍅", sugar:7.30 },
+    { name:"柠檬（安岳柠檬）", icon:"🍋", sugar:7.00 },
+    { name:"桃子（脆桃）", icon:"🍑", sugar:6.30 },
+    { name:"西红柿", icon:"🍅", sugar:6.00 },
+    { name:"草莓", icon:"🍓", sugar:5.10 },
+    { name:"西葫芦", icon:"🥒", sugar:4.60 },
+    { name:"黄瓜", icon:"🥒", sugar:3.30 },
+    { name:"苦瓜", icon:"🥒", sugar:3.20 }
+  ];
+
+  // ========== 饮料数据 ==========
+  const drinks = [
+    { name:"喜茶轻芝莓莓", icon:"🥤", sugar:20.8 },
+    { name:"喜茶轻芝芝芒芒", icon:"🥤", sugar:18.3 },
+    { name:"德芙巧克力牛奶饮品", icon:"🍫", sugar:16.1 },
+    { name:"喜茶喜柿多多", icon:"🥤", sugar:15.0 },
+    { name:"喜茶雪山莓莓桂花冻", icon:"🥤", sugar:14.2 },
+    { name:"瑞幸花魁5.0dirty", icon:"☕", sugar:14.1 },
+    { name:"喜茶多肉幸运桃", icon:"🥤", sugar:14.0 },
+    { name:"喜茶多肉芒芒", icon:"🥤", sugar:13.7 },
+    { name:"瑞幸陨石拿铁半塘", icon:"☕", sugar:11.8 },
+    { name:"丘大叔大力柠檬茶", icon:"🍋", sugar:11.7 },
+    { name:"丘大叔灯笼果柚花柠檬茶标准糖", icon:"🍹", sugar:11.5 },
+    { name:"喜茶多肉大橘", icon:"🥤", sugar:11.1 },
+    { name:"阿萨姆原味奶茶", icon:"🥛", sugar:10.9 },
+    { name:"可口可乐", icon:"🥤", sugar:10.5 },
+    { name:"瑞幸柚c美式不另外加糖（咖啡部分）", icon:"☕", sugar:10.4 },
+    { name:"瑞幸冰拿铁无糖", icon:"☕", sugar:10.0 },
+    { name:"康师傅冰红茶", icon:"🧋", sugar:9.8 },
+    { name:"可口可乐", icon:"🥤", sugar:9.5 },
+    { name:"雪碧", icon:"🥤", sugar:9.4 },
+    { name:"果子熟了斯里兰卡红茶味低糖奶茶饮品", icon:"🧋", sugar:9.4 },
+    { name:"康师傅蜜桃乌龙茶", icon:"🧋", sugar:8.9 },
+    { name:"红牛", icon:"⚡", sugar:8.7 },
+    { name:"美汁源果粒橙", icon:"🍊", sugar:8.3 },
+    { name:"星巴克莓莓黑加仑红茶", icon:"☕", sugar:8.3 },
+    { name:"百事可乐", icon:"🥤", sugar:7.0 },
+    { name:"兰芳园冻柠茶", icon:"🍋", sugar:6.2 },
+    { name:"康师傅绿茶", icon:"🍵", sugar:4.8 },
+    { name:"大窑橙味汽水", icon:"🥤", sugar:3.5 },
+    { name:"三得利低糖乌龙茶", icon:"🍵", sugar:2.3 },
+    { name:"元气森林冬日草莓味苏打气泡水", icon:"🍓", sugar:1.5 },
+    { name:"茶裹王无糖台式乌龙茶", icon:"🍵", sugar:0.4 },
+    { name:"崂山白花蛇草水草本气泡水", icon:"💧", sugar:0.3 }
+  ];
+
+  // 糖分等级
+  function getCategory(sugar, type="fruit"){
+    if(type==="fruit"){
+      if(sugar<10) return "low";
+      if(sugar<=15) return "medium";
+      return "high";
+    }else{
+      if(sugar<5) return "low";
+      if(sugar<=10) return "medium";
+      return "high";
+    }
+  }
+
+  // 渲染水果
+  function renderFruits(list=fruits){
+    const fruitGrid=document.getElementById("fruitGrid");
+    fruitGrid.innerHTML="";
+    list.forEach((f,i)=>{
+      const c=getCategory(f.sugar,"fruit");
+      const w=Math.min((f.sugar/40)*100,100);
+      fruitGrid.innerHTML+=`
+        <div class="fruit-card ${c}-sugar">
+          <div class="fruit-icon" style="animation-delay:${i*0.1}s">${f.icon}</div>
+          <h3>${f.name}</h3>
+          <div class="sugar-amount">${f.sugar.toFixed(2)}%</div>
+          <div class="sugar-bar"><div class="sugar-fill" style="width:${w}%"></div></div>
+          <p>糖度(Brix)：${f.sugar}%</p>
+        </div>`;
+    });
+  }
+
+  // 渲染饮料
+  function renderDrinks(list=drinks){
+    const drinkGrid=document.getElementById("drinkGrid");
+    drinkGrid.innerHTML="";
+    list.forEach((d,i)=>{
+      const c=getCategory(d.sugar,"drink");
+      const w=Math.min((d.sugar/25)*100,100);
+      drinkGrid.innerHTML+=`
+        <div class="drink-card ${c}-sugar">
+          <div class="drink-icon" style="animation-delay:${i*0.1}s">${d.icon}</div>
+          <h3>${d.name}</h3>
+          <div class="sugar-amount">${d.sugar}g/100ml</div>
+          <div class="sugar-bar"><div class="sugar-fill" style="width:${w}%"></div></div>
+          <p>每100毫升含糖 ${d.sugar} 克</p>
+        </div>`;
+    });
+  }
+
+  // 搜索
+  document.getElementById("searchBox").addEventListener("input",function(e){
+    const t=e.target.value.toLowerCase();
+    renderFruits(fruits.filter(f=>f.name.toLowerCase().includes(t)));
+    renderDrinks(drinks.filter(d=>d.name.toLowerCase().includes(t)));
+  });
+
+  document.addEventListener("DOMContentLoaded",()=>{
+    renderFruits();
+    renderDrinks();
+  });
+</script>
+</body>
+</html>
